@@ -48,3 +48,16 @@ TaskFlow/
 ├── style.css
 ├── script.js
 └── README.md
+
+### Step 2 — Save it
+
+Press:
+
+**Ctrl + S**
+
+Then go back to your terminal.
+
+Run:
+
+```powershell
+git add README.md
