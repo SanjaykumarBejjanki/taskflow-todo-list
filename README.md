@@ -8,6 +8,10 @@ It helps users organize their daily tasks with categories, priorities, due dates
 
 [🚀 View TaskFlow Live](https://sanjaykumarbejjanki.github.io/taskflow-todo-list/)
 
+## 📸 Project Preview
+
+![TaskFlow Dashboard](assets/screenshots/taskflow-dashboard.png)
+
 ## ✨ Features
 
 - ✅ Add new tasks
