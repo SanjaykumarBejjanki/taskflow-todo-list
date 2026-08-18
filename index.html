@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow - To-Do List</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <div id="loginScreen" class="auth-screen">
+        <div class="auth-card">
+            <div class="auth-toggle">
+                <button type="button" class="toggle-btn active" data-auth-view="login">
+                    Login
+                </button>
+                <button type="button" class="toggle-btn" data-auth-view="signup">
+                    Sign up
+                </button>
+            </div>
+
+            <div id="loginView" class="auth-form-view">
+                <h2>Welcome back</h2>
+                <p>Sign in to continue with your tasks</p>
+
+                <form id="loginForm">
+                    <label for="usernameInput">Username or Email</label>
+                    <input
+                        type="text"
+                        id="usernameInput"
+                        placeholder="Enter your username or email"
+                        required
+                    >
+
+                    <label for="passwordInput">Password</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="passwordInput"
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <button type="button" class="toggle-password-btn" data-target="passwordInput">
+                            Show
+                        </button>
+                    </div>
+
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        Remember me
+                    </label>
+
+                    <button type="submit" class="login-btn">Login</button>
+                    <button type="button" class="link-btn" data-auth-view="reset">
+                        Forgot password?
+                    </button>
+                </form>
+            </div>
+
+            <div id="signupView" class="auth-form-view hidden">
+                <h2>Create account</h2>
+                <p>Register to manage your tasks</p>
+
+                <form id="signupForm">
+                    <label for="signupUsernameInput">Username</label>
+                    <input
+                        type="text"
+                        id="signupUsernameInput"
+                        placeholder="Choose a username"
+                        required
+                    >
+
+                    <label for="signupEmailInput">Email</label>
+                    <input
+                        type="email"
+                        id="signupEmailInput"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                    <label for="signupPasswordInput">Password</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="signupPasswordInput"
+                            placeholder="Create a password"
+                            required
+                        >
+                        <button type="button" class="toggle-password-btn" data-target="signupPasswordInput">
+                            Show
+                        </button>
+                    </div>
+
+                    <button type="submit" class="login-btn">Sign up</button>
+                </form>
+            </div>
+
+            <div id="resetView" class="auth-form-view hidden">
+                <h2>Reset password</h2>
+                <p>Enter your email and choose a new password</p>
+
+                <form id="resetForm">
+                    <label for="resetEmailInput">Email</label>
+                    <input
+                        type="email"
+                        id="resetEmailInput"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                    <label for="resetPasswordInput">New password</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="resetPasswordInput"
+                            placeholder="Enter a new password"
+                            required
+                        >
+                        <button type="button" class="toggle-password-btn" data-target="resetPasswordInput">
+                            Show
+                        </button>
+                    </div>
+
+                    <label for="resetConfirmPasswordInput">Confirm password</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="resetConfirmPasswordInput"
+                            placeholder="Confirm your new password"
+                            required
+                        >
+                        <button type="button" class="toggle-password-btn" data-target="resetConfirmPasswordInput">
+                            Show
+                        </button>
+                    </div>
+
+                    <button type="submit" class="login-btn">Reset password</button>
+                    <button type="button" class="link-btn" data-auth-view="login">
+                        Back to login
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="deadlinePopup" class="deadline-popup hidden" aria-live="polite">
+        <div class="deadline-popup-content">
+            <div class="deadline-popup-icon">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div>
+                <h3>Deadline Reminder</h3>
+                <p id="deadlinePopupText">Task is due.</p>
+            </div>
+            <button id="closeDeadlinePopup" type="button">Close</button>
+        </div>
+    </div>
+
+    <div id="appContainer" class="app-container hidden">
+
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <h1>
+                    <i class="fa-solid fa-check-double"></i>
+                    TaskFlow
+                </h1>
+
+                <p>Organize your day, accomplish your goals.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="notification-wrapper">
+                    <i class="fa-solid fa-bell notification-icon"></i>
+                    <span id="notificationBadge" class="notification-badge hidden">0</span>
+                </div>
+                <span id="userBadge" class="user-badge">User</span>
+                <button id="logoutBtn" class="logout-btn" type="button">
+                    Logout
+                </button>
+                <button id="themeBtn" class="theme-btn">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+
+        <!-- Statistics -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <i class="fa-solid fa-list-check"></i>
+                <div>
+                    <span id="totalTasks">0</span>
+                    <p>Total Tasks</p>
+                </div>
+            </div>
+
+            <div class="stat-card" data-filter="completed">
+                <i class="fa-solid fa-circle-check"></i>
+                <div>
+                    <span id="completedTasks">0</span>
+                    <p>Completed</p>
+                </div>
+            </div>
+
+            <div class="stat-card" data-filter="active">
+                <i class="fa-solid fa-clock"></i>
+                <div>
+                    <span id="pendingTasks">0</span>
+                    <p>Pending</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Add Task -->
+        <section class="task-input-section">
+
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="What needs to be done?"
+            >
+
+            <select id="categoryInput">
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Study">Study</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <select id="priorityInput">
+                <option value="Low">Low Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="High">High Priority</option>
+            </select>
+
+            <input
+                type="date"
+                id="dateInput"
+            >
+
+            <button id="addTaskBtn">
+                <i class="fa-solid fa-plus"></i>
+                Add Task
+            </button>
+
+        </section>
+
+
+        <!-- Search and Filter -->
+        <section class="controls">
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks..."
+                >
+            </div>
+
+            <div class="filters">
+
+                <button class="filter-btn active" data-filter="all">
+                    All
+                </button>
+
+                <button class="filter-btn" data-filter="active">
+                    Active
+                </button>
+
+                <button class="filter-btn" data-filter="completed">
+                    Completed
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Task List -->
+        <section class="tasks-section">
+
+            <div class="section-title">
+                <h2>My Tasks</h2>
+
+                <span id="taskCount">
+                    0 tasks
+                </span>
+            </div>
+
+            <div id="taskList">
+                <!-- Tasks will appear here -->
+            </div>
+
+            <div id="emptyState" class="empty-state">
+
+                <i class="fa-solid fa-clipboard-list"></i>
+
+                <h3>No tasks yet</h3>
+
+                <p>
+                    Add your first task and start being productive!
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
